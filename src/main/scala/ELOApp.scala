@@ -11,6 +11,7 @@ object ELOApp extends App with Service with LazyLogging {
   override implicit val system = ActorSystem("ELOApp")
   override implicit val executor = system.dispatcher
   override implicit val materializer = ActorMaterializer()
+  override implicit val timeout = 5 seconds
 
   val config = ConfigFactory.load()
 

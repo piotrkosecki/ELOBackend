@@ -1,33 +1,36 @@
-import java.time.LocalDateTime
-
-import actors.UserProtocol.{User, UserStatus}
-import akka.actor.ActorSystem
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.model.StatusCodes._
+import actors.UserActor
+import actors.UserProtocol.{AddUser, GetUserInfo, User}
+import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.server.Directives._
 import akka.stream.Materializer
+import akka.pattern.ask
+import akka.util.Timeout
+import play.api.libs.json.Json
 
-import scala.collection._
 import scala.concurrent.ExecutionContextExecutor
 
 trait Service {
   implicit val system: ActorSystem
   implicit def executor: ExecutionContextExecutor
   implicit val materializer: Materializer
+  implicit val timeout: Timeout
 
+  val userActor = system.actorOf(Props[UserActor])
+
+  case class UserCreation(login: String)
 
   val routes = {
     logRequestResult("elo-api") {
       pathPrefix("user") {
-        (get & entity(as[String])) { id =>
+        (get & path(Segment)) { id =>
           complete {
-
+            (userActor ? GetUserInfo(id)).mapTo[User]
           }
         }
       } ~
-        (post & entity(as[User])) { create =>
+        (post & entity(as[UserCreation])) { user =>
           complete {
-            ???
+            userActor ? AddUser(user.login)
           }
         }
     }
