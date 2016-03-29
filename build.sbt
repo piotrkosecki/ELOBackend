@@ -20,6 +20,6 @@ libraryDependencies ++= {
     "com.typesafe.akka"           %% "akka-http-spray-json-experimental"  % akkaV,
     "com.typesafe.akka"           %% "akka-http-testkit"                  % akkaV,
     "org.scalatest"               %% "scalatest"                          % scalaTestV % "test",
-    "com.typesafe.play"           %% "play-json"                          % "2.5.0"
+    "com.github.fommil"           %% "spray-json-shapeless"               % "1.2.0"
   )
 }

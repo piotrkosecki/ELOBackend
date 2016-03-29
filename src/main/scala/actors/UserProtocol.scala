@@ -13,11 +13,11 @@ object UserProtocol {
   case class UpdateUserStatus(id: String, status: UserStatus)
 
   sealed trait UserStatus
-  case object Idle extends UserStatus
-  case object InQueue extends UserStatus
+  case class Idle() extends UserStatus
+  case class InQueue() extends UserStatus
   case class InGame(id: String) extends UserStatus
 
-  case class User(login: String, rating: Int = 1000, status: UserStatus = Idle, id: String = UUID.randomUUID().toString)
+  case class User(login: String, rating: Int = 1000, status: UserStatus = Idle(), id: String = UUID.randomUUID().toString)
   case class MatchHistory(date: LocalDateTime, players: List[User], won: Option[User])
 
   case class UserCreation(login: String)

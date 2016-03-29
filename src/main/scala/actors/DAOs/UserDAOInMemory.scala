@@ -12,7 +12,7 @@ class UserDAOInMemory extends Actor with ActorLogging {
     case AddUser(user) => {
       log.info(s"Added user $user")
       users+=user
-      sender ! true
+      sender ! user
     }
     case GetUserInfo(id) => {
       sender ! users.find(_.id == id)

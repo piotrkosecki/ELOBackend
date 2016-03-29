@@ -1,11 +1,21 @@
 import actors.UserProtocol.{AddUser, GetUserInfo, User}
-import actors.{ActorImplicits, UserActor}
-import akka.actor.Props
+import actors.UserActor
+import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.server.Directives._
 import akka.pattern.ask
+import akka.stream.ActorMaterializer
+import akka.util.Timeout
 import com.typesafe.scalalogging.slf4j.LazyLogging
+import fommil.sjs.FamilyFormats._
 
-trait Service extends Protocols with LazyLogging with ActorImplicits {
+import scala.concurrent.ExecutionContextExecutor
+
+trait Service extends Protocols with LazyLogging {
+
+  implicit val system: ActorSystem
+  implicit val executor: ExecutionContextExecutor
+  implicit val materializer: ActorMaterializer
+  implicit val timeout: Timeout
 
   lazy val userActor = system.actorOf(Props[UserActor], "userActor")
 
